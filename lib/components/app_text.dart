@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:taneo/style.dart';
 
 class AppText {
-  static Text header(String s) {
+  static Text header(String s, [Color color = Style.black]) {
     return Text(
       s,
-      style: const TextStyle(
+      textAlign: TextAlign.center,
+      style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
+        color: color,
       ),
     );
   }
 
-  static Text gray(String s) {
+  static TextStyle bodyStyle([Color color = Style.gray]) {
+    return TextStyle(color: color, fontSize: Style.bodyFontSize, height: 1.5);
+  }
+
+  static Text body(String s, [Color color = Style.gray]) {
     return Text(
       s,
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        color: Style.gray,
-      ),
+      style: bodyStyle(color),
     );
   }
 

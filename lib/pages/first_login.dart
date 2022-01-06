@@ -32,7 +32,7 @@ class _FirstLoginState extends State<FirstLogin> {
               SizedBox(height: Style.height / 15),
               AppText.header('Put on your dancing shoes'),
               const SizedBox(height: 10),
-              AppText.gray('Create an account to access hundreds\nof free exercise videos'),
+              AppText.body('Create an account to access hundreds\nof free exercise videos'),
               const Spacer(),
               PrimaryButton(callback: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Signup()));

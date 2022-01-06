@@ -47,10 +47,17 @@ class _PrimaryButtonState extends State<PrimaryButton> {
 }
 
 class SecondaryButton extends StatefulWidget {
-  const SecondaryButton({Key? key, required this.callback, required this.grayText, required this.actionText}) : super(key: key);
+  const SecondaryButton({
+    Key? key,
+    required this.callback,
+    required this.grayText,
+    required this.actionText,
+    this.color,
+  }) : super(key: key);
   final VoidCallback callback;
   final String grayText;
   final String actionText;
+  final Color? color;
 
   @override
   _SecondaryButtonState createState() => _SecondaryButtonState();
@@ -72,8 +79,8 @@ class _SecondaryButtonState extends State<SecondaryButton> {
           onPressed: widget.callback,
           child: Text(
             widget.actionText,
-            style: const TextStyle(
-              color: Style.accent,
+            style: TextStyle(
+              color: widget.color ?? Style.accent,
             ),
           ),
         ),
@@ -94,7 +101,6 @@ class LoginWith extends StatefulWidget {
 class _LoginWithState extends State<LoginWith> {
   bool _clicked = false;
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -110,12 +116,46 @@ class _LoginWithState extends State<LoginWith> {
           backgroundColor: Style.white,
           radius: Style.width / 17,
           child: Image.asset(
-            'assets/${widget.imageName}.png',
+            'assets/login_logos/${widget.imageName}.png',
             width: Style.width / 13,
             height: Style.width / 13,
           ),
         ),
       ),
+    );
+  }
+}
+
+class BlackButton extends StatefulWidget {
+  const BlackButton({Key? key, required this.callback, required this.text}) : super(key: key);
+  final VoidCallback callback;
+  final String text;
+
+  @override
+  _BlackButtonState createState() => _BlackButtonState();
+}
+
+class _BlackButtonState extends State<BlackButton> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: Style.width * .65,
+      height: Style.height / 17,
+      child: TextButton(
+        onPressed: widget.callback,
+        child: Text(
+          widget.text,
+          style: const TextStyle(
+            color: Style.white,
+          ),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Style.black),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+          ),
+        ),
+      )
     );
   }
 }

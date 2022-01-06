@@ -4,8 +4,10 @@ import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
 import 'package:taneo/components/socials_login.dart';
+import 'package:taneo/pages/home.dart';
 import 'package:taneo/pages/signup.dart';
 import 'package:taneo/style.dart';
+import 'package:taneo/util/validation.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,6 +19,9 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final FocusNode _f1 = FocusNode();
   final FocusNode _f2 = FocusNode();
+
+  final TextEditingController _controller1 = TextEditingController();
+  final TextEditingController _controller2 = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -34,20 +39,6 @@ class _LoginState extends State<Login> {
     _f1.dispose();
     _f2.dispose();
     super.dispose();
-  }
-
-  bool emailUserValidator(String? s) {
-    if (s == null || s.length < 3) {
-      return false;
-    }
-    return true;
-  }
-
-  bool passwordValidator(String? s) {
-    if (s == null || s.length < 6) {
-      return false;
-    }
-    return true;
   }
 
   @override
@@ -71,10 +62,30 @@ class _LoginState extends State<Login> {
               ),
             ),
             Positioned(
-              top: -10 + MediaQuery.of(context).padding.bottom,
+              top: Style.height / 8,
+              left: 0,
+              child: Image.asset(
+                'assets/background_overlays/lines.png',
+                width: Style.width * .2,
+              ),
+            ),
+            Positioned(
+              top: Style.height / 3 - Style.width * .23,
+              right: 20,
+              child: Transform.rotate(
+                angle: -.2,
+                child: Image.asset(
+                  'assets/background_overlays/note.png',
+                  color: Colors.black.withOpacity(.1),
+                  width: Style.width * .15,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 20,
               left: Style.width * .2,
               width: Style.width * .6,
-              child: Image.asset('assets/salsa.png'),
+              child: Image.asset('assets/dancing.png', height: Style.width / 1.5),
             ),
             Positioned(
               left: 15,
@@ -95,7 +106,7 @@ class _LoginState extends State<Login> {
                 margin: EdgeInsets.zero,
                 color: Style.white,
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
                 ),
                 child: Column(
                   children: [
@@ -104,7 +115,7 @@ class _LoginState extends State<Login> {
                     SizedBox(height: Style.height / 60),
                     const SocialsLogin(),
                     SizedBox(height: Style.height / 90),
-                    AppText.gray('or login with email'),
+                    AppText.body('or login with email'),
                     SizedBox(height: Style.height / 30),
                     Form(
                       key: _formKey,
@@ -114,22 +125,24 @@ class _LoginState extends State<Login> {
                             suggestion: 'Email or username',
                             focusNode: _f1,
                             callback: callback,
-                            validator: emailUserValidator,
+                            validator: Validation.emailUserValidator,
+                            controller: _controller1,
                           ),
                           SizedBox(height: Style.height / 60),
                           CustomTextField(
                             suggestion: 'Password',
                             focusNode: _f2,
                             callback: callback,
-                            validator: passwordValidator,
+                            validator: Validation.passwordValidator,
                             isPassword: true,
+                            controller: _controller2,
                           ),
                         ],
                       ),
                     ),
                     Row(
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         SecondaryButton(
                             callback: () {},
                             grayText: '',
@@ -143,14 +156,18 @@ class _LoginState extends State<Login> {
                     const Spacer(),
                     PrimaryButton(callback: () {
                       if (_formKey.currentState!.validate()) {
-                        print('valid');
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => const Home()
+                            ),
+                            (route) => false,
+                        );
                       } else {
-                        print('not valid');
                         setState(() {
                           visible = true;
                         });
                       }
-                    }, text: 'REGISTER'),
+                    }, text: 'LOGIN'),
                     SizedBox(height: Style.height / 50),
                     SecondaryButton(callback: () {
                       Navigator.of(context).pushAndRemoveUntil(

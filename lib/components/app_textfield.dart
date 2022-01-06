@@ -8,12 +8,14 @@ class CustomTextField extends StatefulWidget {
     required this.focusNode,
     required this.callback,
     required this.validator,
+    required this.controller,
     this.isPassword,
   }) : super(key: key);
   final String suggestion;
   final FocusNode focusNode;
   final VoidCallback callback;
   final bool Function(String? s) validator;
+  final TextEditingController controller;
   final bool? isPassword;
 
   @override
@@ -34,6 +36,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return SizedBox(
       width: Style.width * 2 / 3,
       child: TextFormField(
+        controller: widget.controller,
         focusNode: widget.focusNode,
         onTap: () {
           setState(() {
