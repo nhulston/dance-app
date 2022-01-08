@@ -3,7 +3,7 @@ import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/pages/login.dart';
 import 'package:taneo/pages/signup.dart';
-import '../style.dart';
+import '../util/style.dart';
 
 class FirstLogin extends StatefulWidget {
   const FirstLogin({Key? key}) : super(key: key);

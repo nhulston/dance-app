@@ -23,6 +23,7 @@ flutter:
     - assets/
     - assets/login_logos/
     - assets/background_overlays/
+    - assets/experience_icons/
 
   # fonts:
   #   - family: Schyler

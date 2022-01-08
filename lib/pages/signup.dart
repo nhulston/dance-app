@@ -5,7 +5,7 @@ import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
 import 'package:taneo/components/email_code_popup.dart';
 import 'package:taneo/components/socials_login.dart';
-import 'package:taneo/style.dart';
+import 'package:taneo/util/style.dart';
 import 'package:taneo/util/validation.dart';
 
 import 'login.dart';

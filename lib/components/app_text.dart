@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taneo/style.dart';
+import 'package:taneo/util/style.dart';
 
 class AppText {
   static Text header(String s, [Color color = Style.black]) {

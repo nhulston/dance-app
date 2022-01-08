@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taneo/style.dart';
+import 'package:taneo/util/style.dart';
 
 class PrimaryButton extends StatefulWidget {
   const PrimaryButton({Key? key, required this.callback, required this.text}) : super(key: key);

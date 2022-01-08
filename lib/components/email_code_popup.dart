@@ -3,7 +3,8 @@ import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/verification_code.dart';
 import 'package:taneo/pages/paywall.dart';
-import 'package:taneo/style.dart';
+import 'package:taneo/pages/pick_experience.dart';
+import 'package:taneo/util/style.dart';
 
 class EmailCodePopup extends StatefulWidget {
   const EmailCodePopup({
@@ -121,7 +122,7 @@ class _EmailCodePopupState extends State<EmailCodePopup> {
                             });
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                  builder: (context) => const Paywall()
+                                  builder: (context) => const PickExperience()
                               ),
                                   (route) => false,
                             );

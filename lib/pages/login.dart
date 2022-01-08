@@ -6,7 +6,7 @@ import 'package:taneo/components/app_textfield.dart';
 import 'package:taneo/components/socials_login.dart';
 import 'package:taneo/pages/home.dart';
 import 'package:taneo/pages/signup.dart';
-import 'package:taneo/style.dart';
+import 'package:taneo/util/style.dart';
 import 'package:taneo/util/validation.dart';
 
 class Login extends StatefulWidget {
@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool visible = false;
+  bool _visible = false;
 
   void callback() {
     setState(() {
@@ -151,8 +151,8 @@ class _LoginState extends State<Login> {
                         SizedBox(width: Style.width / 6 - 9),
                       ]
                     ),
-                    if (visible) const SizedBox(height: 5),
-                    if (visible) AppText.error('Please fill out the missing fields'),
+                    if (_visible) const SizedBox(height: 5),
+                    if (_visible) AppText.error('Please fill out the missing fields'),
                     const Spacer(),
                     PrimaryButton(callback: () {
                       if (_formKey.currentState!.validate()) {
@@ -164,7 +164,7 @@ class _LoginState extends State<Login> {
                         );
                       } else {
                         setState(() {
-                          visible = true;
+                          _visible = true;
                         });
                       }
                     }, text: 'LOGIN'),
