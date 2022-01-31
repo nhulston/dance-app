@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  flutter_typeahead: ^3.2.4
+  flutter_keyboard_visibility: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +26,7 @@ flutter:
     - assets/login_logos/
     - assets/background_overlays/
     - assets/experience_icons/
+    - assets/paywall_icons/
 
   # fonts:
   #   - family: Schyler

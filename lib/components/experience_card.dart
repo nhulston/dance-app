@@ -49,7 +49,7 @@ class _ExperienceCardState extends State<ExperienceCard> {
         child: Text(
           widget.description,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Style.gray, fontSize: Style.bodyFontSize + 1, height: 1.5),
+          style: const TextStyle(color: Style.accent, fontSize: Style.bodyFontSize + 1, height: 1.5),
         ),
       ),
     );

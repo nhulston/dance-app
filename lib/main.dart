@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:taneo/pages/first_login.dart';
+import 'package:taneo/pages/home.dart';
 import 'package:taneo/util/style.dart';
 
 /*
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const FirstLogin(),
+      // home: const Home(),
     );
   }
 }

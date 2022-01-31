@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/experience_card.dart';
-import 'package:taneo/pages/home.dart';
 import 'package:taneo/pages/paywall.dart';
 import 'package:taneo/util/style.dart';
 
@@ -24,14 +23,13 @@ class _PickExperienceState extends State<PickExperience> {
     };
   }
 
-  final BorderRadius _borderRadius = const BorderRadius.all(Radius.circular(20));
   double _getElevation(int x) {
     return _selected == x ? 10 : 0;
   }
 
   Widget _experienceWrapper(Widget child, int x) {
     return Material(
-      borderRadius: _borderRadius,
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
       elevation: _getElevation(x),
       child: Container(
         foregroundDecoration: _selected == x ? null : BoxDecoration(
@@ -65,7 +63,7 @@ class _PickExperienceState extends State<PickExperience> {
                   img: 'beginner'
                 ), 0),
               const Spacer(),
-              if (_selected == -1) const Divider(thickness: 1),
+              Divider(thickness: 1, color: (_selected == -1) ? Colors.grey.shade300 : Colors.transparent),
               const Spacer(),
               _experienceWrapper(
                 const ExperienceCard(
@@ -75,7 +73,7 @@ class _PickExperienceState extends State<PickExperience> {
                   imageOnRight: true,
                 ), 1),
               const Spacer(),
-              if (_selected == -1) const Divider(thickness: 1),
+              Divider(thickness: 1, color: (_selected == -1) ? Colors.grey.shade300 : Colors.transparent),
               const Spacer(),
               _experienceWrapper(
                 const ExperienceCard(

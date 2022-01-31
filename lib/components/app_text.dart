@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:taneo/util/style.dart';
 
 class AppText {
-  static Text header(String s, [Color color = Style.black]) {
+  static Text header(String s, [Color color = Style.black, double sizeFactor = 1]) {
     return Text(
       s,
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 24,
+        fontSize: 24 * sizeFactor,
         fontWeight: FontWeight.bold,
         color: color,
       ),
@@ -18,11 +18,21 @@ class AppText {
     return TextStyle(color: color, fontSize: Style.bodyFontSize, height: 1.5);
   }
 
-  static Text body(String s, [Color color = Style.gray]) {
+  static Text body(String s, [Color color = Style.gray, TextAlign textAlign = TextAlign.center]) {
     return Text(
       s,
-      textAlign: TextAlign.center,
+      textAlign: textAlign,
       style: bodyStyle(color),
+    );
+  }
+
+  static Text boldSubtext(String s) {
+    return Text(
+      s,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 13,
+      ),
     );
   }
 

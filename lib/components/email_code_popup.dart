@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/verification_code.dart';
-import 'package:taneo/pages/paywall.dart';
 import 'package:taneo/pages/pick_experience.dart';
 import 'package:taneo/util/style.dart';
 

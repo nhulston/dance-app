@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
+import 'package:taneo/components/back_arrow.dart';
 import 'package:taneo/components/email_code_popup.dart';
 import 'package:taneo/components/socials_login.dart';
 import 'package:taneo/util/style.dart';
@@ -104,16 +105,7 @@ class SignupState extends State<Signup> {
               width: Style.width * .6,
               child: Image.asset('assets/dancing.png', height: Style.width / 1.5),
             ),
-            Positioned(
-              left: 15,
-              top: MediaQuery.of(context).padding.top,
-              child: IconButton(
-                icon: const Icon(CupertinoIcons.back, size: 32, color: Style.white),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
+            const BackArrow(),
             Positioned(
               bottom: 0,
               left: 0,

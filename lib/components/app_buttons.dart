@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:taneo/util/style.dart';
 
 class PrimaryButton extends StatefulWidget {
-  const PrimaryButton({Key? key, required this.callback, required this.text}) : super(key: key);
-  final VoidCallback callback;
+  const PrimaryButton({
+    Key? key,
+    required this.callback,
+    required this.text,
+    this.widthFactor,
+  }) : super(key: key);
+  final VoidCallback? callback;
   final String text;
+  final double? widthFactor;
 
   @override
   _PrimaryButtonState createState() => _PrimaryButtonState();
@@ -14,7 +20,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Style.width * .7,
+      width: Style.width * .7 * (widget.widthFactor ?? 1),
       height: Style.height / 17,
       decoration: BoxDecoration(
         gradient: const LinearGradient(colors: [Style.accent, Style.accentGradient]),
@@ -34,6 +40,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           widget.text,
           style: const TextStyle(
             letterSpacing: 1,
+            color: Style.white,
           ),
         ),
         style: ElevatedButton.styleFrom(
@@ -127,8 +134,13 @@ class _LoginWithState extends State<LoginWith> {
 }
 
 class BlackButton extends StatefulWidget {
-  const BlackButton({Key? key, required this.callback, required this.text}) : super(key: key);
-  final VoidCallback callback;
+  const BlackButton({
+    Key? key,
+    required this.callback,
+    required this.text,
+  }) : super(key: key);
+
+  final VoidCallback? callback;
   final String text;
 
   @override

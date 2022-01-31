@@ -34,4 +34,8 @@ class Validation {
     }
     return true;
   }
+
+  static bool notEmpty(String? s) {
+    return s != null && s.isNotEmpty;
+  }
 }
