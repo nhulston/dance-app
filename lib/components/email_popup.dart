@@ -1,12 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
-import 'package:taneo/components/verification_code.dart';
-import 'package:taneo/pages/pick_experience.dart';
+import 'package:taneo/pages/home.dart';
 import 'package:taneo/util/style.dart';
 
-class EmailCodePopup extends StatefulWidget {
-  const EmailCodePopup({
+class EmailPopup extends StatefulWidget {
+  const EmailPopup({
     Key? key,
     required this.email,
     required this.goBackCallback,
@@ -15,13 +16,10 @@ class EmailCodePopup extends StatefulWidget {
   final VoidCallback goBackCallback;
 
   @override
-  _EmailCodePopupState createState() => _EmailCodePopupState();
+  _EmailPopupState createState() => _EmailPopupState();
 }
 
-class _EmailCodePopupState extends State<EmailCodePopup> {
-  String? _code;
-  bool _editing = false;
-
+class _EmailPopupState extends State<EmailPopup> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -96,50 +94,23 @@ class _EmailCodePopupState extends State<EmailCodePopup> {
                               ]
                           ),
                         ),
-                        VerificationCode(
-                          itemSize: Style.width / 10,
-                          length: 5,
-                          digitsOnly: true,
-                          textStyle: const TextStyle(fontSize: 20.0, color: Style.white),
-                          underlineColor: Style.white,
-                          underlineUnfocusedColor: Colors.grey.shade600,
-                          keyboardType: TextInputType.number,
-                          clearAll: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'clear all',
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                color: Style.white,
-                                decoration: TextDecoration.underline,
-                              ),
+                        const Spacer(flex: 3),
+                        BlackButton(callback: () {
+                          log('Sign up completed. Going to home');
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
                             ),
-                          ),
-                          onCompleted: (String value) {
-                            setState(() {
-                              _code = value;
-                            });
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => const PickExperience()
-                              ),
-                                  (route) => false,
-                            );
-                          },
-                          onEditing: (bool value) {
-                            setState(() {
-                              _editing = value;
-                            });
-                          },
-                        ),
-                        const Spacer(flex: 1),
-                        BlackButton(callback: () {}, text: 'Resend email confirmation'),
+                            ModalRoute.withName('/Home')
+                          );
+                        }, text: 'Complete Sign Up'),
                         Row(
                           children: [
                             SecondaryButton(callback: () {
                               widget.goBackCallback();
                               Navigator.of(context).pop();
-                            }, grayText: '', actionText: 'Change email', color: Style.white),
+                            }, grayText: '', actionText: 'Change email', color: Style.white), // TODO
                             const SizedBox(width: 5),
                             const Spacer(),
                           ],

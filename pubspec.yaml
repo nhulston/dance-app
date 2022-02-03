@@ -12,6 +12,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_typeahead: ^3.2.4
   flutter_keyboard_visibility: ^5.1.1
+  firebase_core: ^1.12.0
+  firebase_auth: ^3.3.6
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -19,7 +22,7 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter:
-  uses-material-design: false
+  uses-material-design: true
 
   assets:
     - assets/
@@ -27,6 +30,7 @@ flutter:
     - assets/background_overlays/
     - assets/experience_icons/
     - assets/paywall_icons/
+    - assets/search_icons/
 
   # fonts:
   #   - family: Schyler

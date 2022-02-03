@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+@Deprecated('Not in use anymore')
 class VerificationCode extends StatefulWidget {
   final ValueChanged<String> onCompleted;
   final ValueChanged<bool> onEditing;

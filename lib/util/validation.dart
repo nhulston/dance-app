@@ -13,20 +13,6 @@ class Validation {
     }
     return true;
   }
-  
-  static bool usernameValidator(String? s) {
-    if (s == null || s.length < 3 || hasSpecialChar(s) || hasAtOrDot(s)) {
-      return false;
-    }
-    return true;
-  }
-
-  static bool emailUserValidator(String? s) {
-    if (s == null || s.length < 3 || hasSpecialChar(s)) {
-      return false;
-    }
-    return true;
-  }
 
   static bool passwordValidator(String? s) {
     if (s == null || s.length < 6) {

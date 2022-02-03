@@ -9,6 +9,7 @@ class CustomTextField extends StatefulWidget {
     required this.suggestion,
     required this.focusNode,
     required this.callback,
+    required this.editCallback,
     required this.validator,
     required this.controller,
     this.isPassword,
@@ -16,6 +17,7 @@ class CustomTextField extends StatefulWidget {
   final String suggestion;
   final FocusNode focusNode;
   final VoidCallback callback;
+  final VoidCallback editCallback;
   final bool Function(String? s) validator;
   final TextEditingController controller;
   final bool? isPassword;
@@ -51,6 +53,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           setState(() {
             _controller.text = s;
           });
+          widget.editCallback();
         },
         validator: (s) {
           if (!widget.validator(s)) {
@@ -102,20 +105,34 @@ class SimpleTextField {
     ),
   );
 
-  static TextFieldConfiguration getTextFieldConfiguration(TextEditingController controller) {
+  static TextFieldConfiguration getTextFieldConfiguration(TextEditingController controller, var callback) {
     return TextFieldConfiguration(
       controller: controller,
-      decoration: const InputDecoration(
-          prefixIcon: Icon(CupertinoIcons.search, color: Style.black),
+      onChanged: (s) {
+        callback();
+      },
+      decoration: InputDecoration(
+          prefixIcon: const Icon(CupertinoIcons.search, color: Style.black),
+          suffixIcon: IconButton(
+            splashColor: controller.text.isEmpty ? Colors.transparent : null,
+            onPressed: () {
+              controller.text = '';
+              callback();
+            },
+            icon: Visibility(
+              visible: controller.text.isNotEmpty,
+              child: const Icon(CupertinoIcons.clear, color: Style.black, size: 20)
+            ),
+          ),
           enabledBorder: _border,
           focusedBorder: _border,
           errorBorder: _border,
           focusedErrorBorder: _border,
-          hintText: 'Skill, technique, or genre',
-          hintStyle: TextStyle(
+          hintText: 'Skill, exercise, or playlist',
+          hintStyle: const TextStyle(
             color: Style.black,
           ),
-          contentPadding: EdgeInsets.fromLTRB(15, 10, 10, 0)
+          contentPadding: const EdgeInsets.fromLTRB(15, 10, 10, 0)
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
@@ -44,32 +46,50 @@ class _SearchTabState extends State<SearchTab> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(Style.width / 12, 10, Style.width / 12, 0),
+          padding: EdgeInsets.fromLTRB(Style.width / 12, Platform.isAndroid ? 30 : 10, Style.width / 12, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppText.header('Search'),
               const SizedBox(height: 10),
               TypeAheadFormField(
-                textFieldConfiguration: SimpleTextField.getTextFieldConfiguration(_controller),
+                textFieldConfiguration: SimpleTextField.getTextFieldConfiguration(_controller, () {
+                  setState(() {});
+                }),
                 suggestionsCallback: (pattern) {
                   return search(pattern);
                 },
+                suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  clipBehavior: Clip.antiAlias,
+                ),
                 itemBuilder: (context, String suggestion) {
-                  return ListTile(
-                    title: Text(suggestion),
+                  return Column(
+                    children: [
+                      ListTile(
+                        title: Text(suggestion),
+                      ),
+                      Divider(thickness: 1, color: Colors.grey.shade300, height: 0),
+                    ],
+                  );
+                },
+                noItemsFoundBuilder: (context) {
+                  return const ListTile(
+                    title: Text('No results found', textAlign: TextAlign.center),
                   );
                 },
                 transitionBuilder: (context, suggestionsBox, controller) {
                   return suggestionsBox;
                 },
                 onSuggestionSelected: (String suggestion) {
-                  _controller.text = suggestion;
-                  print('Selected ' + suggestion);
+                  setState(() {
+                    _controller.text = suggestion;
+                  });
                 },
                 onSaved: (String? value) {
-                  _selected = value!;
-                  print('Selected ' + value);
+                  setState(() {
+                    _selected = value!;
+                  });
                 }
               ),
               const SizedBox(height: 20),
@@ -78,22 +98,23 @@ class _SearchTabState extends State<SearchTab> {
                   padding: const EdgeInsets.only(bottom: 20),
                   primary: true,
                   crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 25,
+                  mainAxisSpacing: 25,
                   children: const [
-                    GenresBox(name: 'Strength', color: Colors.deepOrangeAccent, image: ''),
-                    GenresBox(name: 'Flexibility', color: Colors.deepPurpleAccent, image: ''),
-                    GenresBox(name: 'Balance', color: Colors.pink, image: ''),
-                    GenresBox(name: 'Turnout', color: Colors.blueAccent, image: ''),
-                    GenresBox(name: 'Kicks', color: Colors.redAccent, image: ''),
-                    GenresBox(name: 'Jumps', color: Colors.deepOrangeAccent, image: ''),
-                    GenresBox(name: 'Turns', color: Colors.deepPurpleAccent, image: ''),
-                    GenresBox(name: 'Ballet', color: Colors.pink, image: ''),
-                    GenresBox(name: 'Acrobatics', color: Colors.blueAccent, image: ''),
-                    GenresBox(name: 'Jazz', color: Colors.redAccent, image: ''),
+                    GenresBox(name: 'Strength', color: Colors.deepOrangeAccent, image: 'strength'),
+                    GenresBox(name: 'Flexibility', color: Colors.deepPurpleAccent, image: 'flexibility'),
+                    GenresBox(name: 'Balance', color: Colors.pink, image: 'balance'),
+                    GenresBox(name: 'Turnout', color: Colors.blueAccent, image: 'turnout'),
+                    GenresBox(name: 'Kicks', color: Colors.redAccent, image: 'kicks'),
+                    GenresBox(name: 'Jumps', color: Colors.deepOrangeAccent, image: 'jumps'),
+                    GenresBox(name: 'Turns', color: Colors.deepPurpleAccent, image: 'turns'),
+                    GenresBox(name: 'Ballet', color: Colors.pink, image: 'ballet'),
+                    GenresBox(name: 'Acrobatics', color: Colors.blueAccent, image: 'acrobatics'),
+                    GenresBox(name: 'Jazz', color: Colors.redAccent, image: 'jazz'),
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -137,6 +158,14 @@ class _GenresBoxState extends State<GenresBox> {
               left: 10,
               child: AppText.header(widget.name, Style.white, 0.9),
             ),
+            if (widget.image.isNotEmpty) Positioned(
+              bottom: 15,
+              right: -15,
+              child: Transform.rotate(
+                angle: 0.2,
+                child: Image.asset('assets/search_icons/' + widget.image + '.png', height: 90),
+              ),
+            )
           ],
         ),
       ),

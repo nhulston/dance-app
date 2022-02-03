@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taneo/pages/tabs/home_tab.dart';
 import 'package:taneo/pages/tabs/search_tab.dart';
+import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
 
 class Home extends StatefulWidget {
@@ -27,6 +29,8 @@ class _HomeState extends State<Home> {
     Style.height = MediaQuery.of(context).size.height;
     Style.width = MediaQuery.of(context).size.width;
 
+    AuthenticationService.email = FirebaseAuth.instance.currentUser!.email;
+
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -34,11 +38,7 @@ class _HomeState extends State<Home> {
         },
         child: PageView(
           controller: pageController,
-          onPageChanged: (page){
-            setState(() {
-              _selectedIndex=page;
-            });
-          },
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             const HomeTab(),
             const SearchTab(),

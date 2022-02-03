@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
@@ -7,6 +10,7 @@ import 'package:taneo/components/back_arrow.dart';
 import 'package:taneo/components/socials_login.dart';
 import 'package:taneo/pages/home.dart';
 import 'package:taneo/pages/signup.dart';
+import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
 import 'package:taneo/util/validation.dart';
 
@@ -21,12 +25,14 @@ class _LoginState extends State<Login> {
   final FocusNode _f1 = FocusNode();
   final FocusNode _f2 = FocusNode();
 
-  final TextEditingController _controller1 = TextEditingController();
-  final TextEditingController _controller2 = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-  bool _visible = false;
+  bool _missingFieldsVisible = false;
+  bool _incorrectLoginVisible = false;
+  bool _textChanged = false;
 
   void callback() {
     setState(() {
@@ -35,10 +41,16 @@ class _LoginState extends State<Login> {
     });
   }
 
+  void editCallback() {
+    _textChanged = true;
+  }
+
   @override
   void dispose() {
     _f1.dispose();
     _f2.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -114,20 +126,22 @@ class _LoginState extends State<Login> {
                       child: Column(
                         children: [
                           CustomTextField(
-                            suggestion: 'Email or username',
+                            suggestion: 'Email',
                             focusNode: _f1,
                             callback: callback,
-                            validator: Validation.emailUserValidator,
-                            controller: _controller1,
+                            editCallback: editCallback,
+                            validator: Validation.emailValidator,
+                            controller: _emailController,
                           ),
                           SizedBox(height: Style.height / 60),
                           CustomTextField(
                             suggestion: 'Password',
                             focusNode: _f2,
                             callback: callback,
+                            editCallback: editCallback,
                             validator: Validation.passwordValidator,
                             isPassword: true,
-                            controller: _controller2,
+                            controller: _passwordController,
                           ),
                         ],
                       ),
@@ -143,20 +157,41 @@ class _LoginState extends State<Login> {
                         SizedBox(width: Style.width / 6 - 9),
                       ]
                     ),
-                    if (_visible) const SizedBox(height: 5),
-                    if (_visible) AppText.error('Please fill out the missing fields'),
+                    if (_missingFieldsVisible || _incorrectLoginVisible) const SizedBox(height: 5),
+                    if (_missingFieldsVisible) AppText.error('Please fill out the missing fields.'),
+                    if (_incorrectLoginVisible) AppText.error('That email or password is incorrect.'),
                     const Spacer(),
-                    PrimaryButton(callback: () {
+                    PrimaryButton(callback: () async {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => const Home()
-                            ),
-                            (route) => false,
-                        );
+                        if (_textChanged) {
+                          log('Attempting to sign in with email ${_emailController.text}');
+                          await context.read<AuthenticationService>().signIn(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          );
+
+                          if(FirebaseAuth.instance.currentUser != null) {
+                            log('Sign in successful');
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()
+                                ),
+                                ModalRoute.withName('/Home')
+                            );
+                          } else {
+                            log('Sign in failed');
+                            _textChanged = false;
+                            setState(() {
+                              _missingFieldsVisible = false;
+                              _incorrectLoginVisible = true;
+                            });
+                          }
+                        }
                       } else {
                         setState(() {
-                          _visible = true;
+                          _incorrectLoginVisible = false;
+                          _missingFieldsVisible = true;
                         });
                       }
                     }, text: 'LOGIN'),

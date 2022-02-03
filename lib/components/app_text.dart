@@ -26,12 +26,12 @@ class AppText {
     );
   }
 
-  static Text boldSubtext(String s) {
+  static Text boldSubtext(String s, [double scale = 1]) {
     return Text(
       s,
-      style: const TextStyle(
+      style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 13,
+        fontSize: 13 * scale,
       ),
     );
   }
