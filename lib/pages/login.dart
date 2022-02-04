@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:taneo/components/app_buttons.dart';
@@ -24,8 +25,10 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final FocusNode _f1 = FocusNode();
   final FocusNode _f2 = FocusNode();
+  final FocusNode _f3 = FocusNode();
 
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _resetEmailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -38,6 +41,7 @@ class _LoginState extends State<Login> {
     setState(() {
       _f1.unfocus();
       _f2.unfocus();
+      _f3.unfocus();
     });
   }
 
@@ -49,7 +53,9 @@ class _LoginState extends State<Login> {
   void dispose() {
     _f1.dispose();
     _f2.dispose();
+    _f3.dispose();
     _emailController.dispose();
+    _resetEmailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -150,9 +156,84 @@ class _LoginState extends State<Login> {
                       children: [
                         const Spacer(),
                         SecondaryButton(
-                            callback: () {},
-                            grayText: '',
-                            actionText: 'Forgot password?'
+                          callback: () {
+                            _resetEmailController.text = _emailController.text;
+                            showCupertinoDialog(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (context) => Dialog(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                                ),
+                                child: SizedBox(
+                                  height: Style.height / 3,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(25, 30, 25, 10),
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                          'Reset password',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text('Please enter the email associated with your account.', textAlign: TextAlign.center,),
+                                        const SizedBox(height: 20),
+                                        CustomTextField(
+                                          suggestion: 'Email',
+                                          focusNode: _f3,
+                                          callback: callback,
+                                          editCallback: editCallback,
+                                          validator: Validation.emailValidator,
+                                          controller: _resetEmailController,
+                                        ),
+                                        const Spacer(),
+                                        Row(
+                                          children: [
+                                            const Spacer(),
+                                            TextButton(
+                                              style: ButtonStyle(
+                                                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text(
+                                                'Cancel',
+                                                style: TextStyle(color: Style.gray, fontWeight: FontWeight.normal),
+                                              ),
+                                            ),
+                                            TextButton(
+                                                style: ButtonStyle(
+                                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  FirebaseAuth.instance.sendPasswordResetEmail(email: _resetEmailController.text.trim());
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text('Password reset sent to ${_resetEmailController.text.trim()}'),
+                                                      action: SnackBarAction(
+                                                          label: 'Dismiss',
+                                                          onPressed: () {}
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Text('Confirm')
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          grayText: '',
+                          actionText: 'Forgot password?'
                         ),
                         SizedBox(width: Style.width / 6 - 9),
                       ]
