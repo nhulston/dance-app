@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
@@ -58,7 +59,71 @@ class _SettingsState extends State<Settings> {
                         ),
                         const SizedBox(height: 10),
                         GestureDetector(
-                          onTap: () {},
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            showCupertinoDialog(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (context) => Dialog(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(25, 30, 25, 10),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Reset password',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const Text('Are you sure you want to reset your password?', textAlign: TextAlign.center,),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          const Spacer(),
+                                          TextButton(
+                                            style: ButtonStyle(
+                                              overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(color: Style.gray, fontWeight: FontWeight.normal),
+                                            ),
+                                          ),
+                                          TextButton(
+                                              style: ButtonStyle(
+                                                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                FirebaseAuth.instance.sendPasswordResetEmail(email: AuthenticationService.email ?? '');
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('Password reset sent to ${AuthenticationService.email ?? 'error'}'),
+                                                    action: SnackBarAction(
+                                                        label: 'Dismiss',
+                                                        onPressed: () {}
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: const Text('Confirm')
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

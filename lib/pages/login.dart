@@ -165,68 +165,66 @@ class _LoginState extends State<Login> {
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(Radius.circular(16)),
                                 ),
-                                child: SizedBox(
-                                  height: Style.height / 3,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(25, 30, 25, 10),
-                                    child: Column(
-                                      children: [
-                                        const Text(
-                                          'Reset password',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(25, 30, 25, 10),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Reset password',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const Text('Please enter the email associated with your account.', textAlign: TextAlign.center,),
+                                      const SizedBox(height: 20),
+                                      CustomTextField(
+                                        suggestion: 'Email',
+                                        focusNode: _f3,
+                                        callback: callback,
+                                        editCallback: editCallback,
+                                        validator: Validation.emailValidator,
+                                        controller: _resetEmailController,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        children: [
+                                          const Spacer(),
+                                          TextButton(
+                                            style: ButtonStyle(
+                                              overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(color: Style.gray, fontWeight: FontWeight.normal),
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        const Text('Please enter the email associated with your account.', textAlign: TextAlign.center,),
-                                        const SizedBox(height: 20),
-                                        CustomTextField(
-                                          suggestion: 'Email',
-                                          focusNode: _f3,
-                                          callback: callback,
-                                          editCallback: editCallback,
-                                          validator: Validation.emailValidator,
-                                          controller: _resetEmailController,
-                                        ),
-                                        const Spacer(),
-                                        Row(
-                                          children: [
-                                            const Spacer(),
-                                            TextButton(
+                                          TextButton(
                                               style: ButtonStyle(
                                                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                                               ),
                                               onPressed: () {
                                                 Navigator.of(context).pop();
-                                              },
-                                              child: const Text(
-                                                'Cancel',
-                                                style: TextStyle(color: Style.gray, fontWeight: FontWeight.normal),
-                                              ),
-                                            ),
-                                            TextButton(
-                                                style: ButtonStyle(
-                                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                  FirebaseAuth.instance.sendPasswordResetEmail(email: _resetEmailController.text.trim());
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(
-                                                      content: Text('Password reset sent to ${_resetEmailController.text.trim()}'),
-                                                      action: SnackBarAction(
-                                                          label: 'Dismiss',
-                                                          onPressed: () {}
-                                                      ),
+                                                FirebaseAuth.instance.sendPasswordResetEmail(email: _resetEmailController.text.trim());
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('Password reset sent to ${_resetEmailController.text.trim()}'),
+                                                    action: SnackBarAction(
+                                                        label: 'Dismiss',
+                                                        onPressed: () {}
                                                     ),
-                                                  );
-                                                },
-                                                child: const Text('Confirm')
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: const Text('Confirm')
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
