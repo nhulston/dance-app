@@ -96,37 +96,6 @@ class _SecondaryButtonState extends State<SecondaryButton> {
   }
 }
 
-class LoginWith extends StatefulWidget {
-  const LoginWith({Key? key, required this.callback, required this.imageName}) : super(key: key);
-  final VoidCallback callback;
-  final String imageName;
-
-  @override
-  _LoginWithState createState() => _LoginWithState();
-}
-
-class _LoginWithState extends State<LoginWith> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.callback,
-      child: CircleAvatar(
-        backgroundColor: Colors.black.withOpacity(.2),
-        radius: Style.width / 17 + 1,
-        child: CircleAvatar(
-          backgroundColor: Style.white,
-          radius: Style.width / 17,
-          child: Image.asset(
-            'assets/login_logos/${widget.imageName}.png',
-            width: Style.width / 13,
-            height: Style.width / 13,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class BlackButton extends StatefulWidget {
   const BlackButton({
     Key? key,

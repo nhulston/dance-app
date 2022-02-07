@@ -27,7 +27,6 @@ flutter:
 
   assets:
     - assets/
-    - assets/login_logos/
     - assets/background_overlays/
     - assets/experience_icons/
     - assets/paywall_icons/

@@ -9,7 +9,7 @@ import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
 import 'package:taneo/components/back_arrow.dart';
 import 'package:taneo/components/popup.dart';
-import 'package:taneo/components/socials_login.dart';
+import 'package:taneo/components/google_login_button.dart';
 import 'package:taneo/pages/home.dart';
 import 'package:taneo/pages/signup.dart';
 import 'package:taneo/util/authentication_service.dart';
@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                     SizedBox(height: Style.height / 23),
                     AppText.header('Login to your account'),
                     SizedBox(height: Style.height / 60),
-                    const SocialsLogin(),
+                    const GoogleLoginButton(),
                     SizedBox(height: Style.height / 90),
                     AppText.body('or login with email'),
                     SizedBox(height: Style.height / 30),

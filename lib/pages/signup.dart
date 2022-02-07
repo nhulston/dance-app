@@ -9,7 +9,7 @@ import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
 import 'package:taneo/components/back_arrow.dart';
 import 'package:taneo/components/email_popup.dart';
-import 'package:taneo/components/socials_login.dart';
+import 'package:taneo/components/google_login_button.dart';
 import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
 import 'package:taneo/util/validation.dart';
@@ -126,7 +126,7 @@ class SignupState extends State<Signup> {
                     SizedBox(height: Style.height / 23),
                     AppText.header('Create New Account'),
                     SizedBox(height: Style.height / 60),
-                    const SocialsLogin(),
+                    const GoogleLoginButton(),
                     SizedBox(height: Style.height / 90),
                     AppText.body('or sign up with email'),
                     SizedBox(height: Style.height / 30),
