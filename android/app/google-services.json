@@ -29,6 +29,13 @@
             {
               "client_id": "1061291969644-c9g7bsu5re1l21haa1ad59j4a8cv47bs.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1061291969644-61v9dbjuoj1d7qpa2qf56heot9nv3jil.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "me.nhulston.taneo"
+              }
             }
           ]
         }

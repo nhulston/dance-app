@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
       future: _firebaseApp,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          log('has error');
           return MaterialApp(
             builder: (context, widget) {
               return Scaffold(
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
             },
           );
         } else if (snapshot.hasData) {
+          log('has data');
           return MultiProvider(
             providers: [
               Provider<AuthenticationService>(
@@ -80,6 +84,7 @@ class MyApp extends StatelessWidget {
             ),
           );
         } else {
+          log('loading');
           return MaterialApp(
             builder: (context, widget) {
               return const Scaffold(

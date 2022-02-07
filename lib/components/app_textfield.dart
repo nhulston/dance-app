@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
     required this.validator,
     required this.controller,
     this.isPassword,
+    this.isEmail,
   }) : super(key: key);
   final String suggestion;
   final FocusNode focusNode;
@@ -21,6 +22,7 @@ class CustomTextField extends StatefulWidget {
   final bool Function(String? s) validator;
   final TextEditingController controller;
   final bool? isPassword;
+  final bool? isEmail;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -40,6 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return SizedBox(
       width: Style.width * 2 / 3,
       child: TextFormField(
+        keyboardType: widget.isEmail == null ? TextInputType.text : TextInputType.emailAddress,
         controller: widget.controller,
         focusNode: widget.focusNode,
         onTap: () {

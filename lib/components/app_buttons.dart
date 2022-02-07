@@ -106,18 +106,12 @@ class LoginWith extends StatefulWidget {
 }
 
 class _LoginWithState extends State<LoginWith> {
-  bool _clicked = false;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _clicked = true;
-        });
-      },
+      onTap: widget.callback,
       child: CircleAvatar(
-        backgroundColor: _clicked ? Style.accent : Colors.black.withOpacity(.2),
+        backgroundColor: Colors.black.withOpacity(.2),
         radius: Style.width / 17 + 1,
         child: CircleAvatar(
           backgroundColor: Style.white,

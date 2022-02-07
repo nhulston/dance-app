@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -142,6 +141,7 @@ class SignupState extends State<Signup> {
                             editCallback: editCallback, // TODO
                             validator: Validation.emailValidator,
                             controller: _emailController,
+                            isEmail: true,
                           ),
                           SizedBox(height: Style.height / 60),
                           CustomTextField(
@@ -182,7 +182,7 @@ class SignupState extends State<Signup> {
                               toggleOpenedDialog();
                             });
 
-                            showDialog(
+                            showCupertinoDialog(
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (context) {

@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:taneo/components/app_text.dart';
+import 'package:taneo/components/app_textfield.dart';
+import 'package:taneo/components/popup.dart';
 import 'package:taneo/pages/first_login.dart';
 import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
+import 'package:taneo/util/validation.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -48,7 +51,125 @@ class _SettingsState extends State<Settings> {
                         AppText.header('Account', Style.black, 0.9),
                         const SizedBox(height: 5),
                         GestureDetector(
-                          onTap: () {},
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            showCupertinoDialog(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (context) => Popup(
+                                title: 'Change email',
+                                content:
+                                const Text('Are you sure you want to change your email?'),
+                                okCallback: () {
+                                  final TextEditingController _passwordController = TextEditingController();
+                                  Navigator.of(context).pop();
+                                  showCupertinoDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) => Popup(
+                                        title: 'Confirm password',
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text('Please confirm your current password'),
+                                            const SizedBox(height: 20),
+                                            CustomTextField(
+                                              suggestion: 'Password',
+                                              focusNode: FocusNode(),
+                                              callback: () {},
+                                              editCallback: () {},
+                                              validator: Validation.passwordValidator,
+                                              controller: _passwordController,
+                                              isPassword: true,
+                                            ),
+                                          ],
+                                        ),
+                                        okCallback: () async {
+                                          AuthCredential credential = EmailAuthProvider.credential(
+                                            email: AuthenticationService.email!,
+                                            password: _passwordController.text,
+                                          );
+                                          await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential).then((value) {
+                                            Navigator.of(context).pop();
+                                            final TextEditingController _emailController = TextEditingController();
+                                            bool _changed = true;
+                                            showCupertinoDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (context) => Popup(
+                                                  title: 'Enter email',
+                                                  content: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      const Text('What email do you want to switch to?'),
+                                                      const SizedBox(height: 20),
+                                                      CustomTextField(
+                                                        suggestion: 'Email',
+                                                        focusNode: FocusNode(),
+                                                        callback: () {},
+                                                        editCallback: () {
+                                                          _changed = true;
+                                                        },
+                                                        validator: Validation.emailValidator,
+                                                        controller: _emailController,
+                                                        isEmail: true,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  okCallback: () async {
+                                                    if (_changed && Validation.emailValidator(_emailController.text)) {
+                                                      await FirebaseAuth.instance.currentUser!.updateEmail(_emailController.text).then((value) {
+                                                        Navigator.of(context).pop();
+                                                        setState(() {
+                                                          AuthenticationService.email = FirebaseAuth.instance.currentUser!.email;
+                                                        });
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text('Email successfully changed to ${_emailController.text}'),
+                                                            action: SnackBarAction(
+                                                                label: 'Dismiss',
+                                                                onPressed: () {}
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }).catchError((error) {
+                                                        _changed = false;
+                                                        String errorMsg = error.toString().substring(error.toString().indexOf(']') + 2);
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(errorMsg),
+                                                            action: SnackBarAction(
+                                                                label: 'Dismiss',
+                                                                onPressed: () {}
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                    }
+                                                  }
+                                              ),
+                                            );
+                                          }).catchError((error) {
+                                            if (Validation.passwordValidator(_passwordController.text)) {
+                                              Navigator.of(context).pop();
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                  content: const Text('Invalid password. Please try again.'),
+                                                  action: SnackBarAction(
+                                                      label: 'Dismiss',
+                                                      onPressed: () {}
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          });
+                                        }
+                                    ),
+                                  );
+                                }
+                              ),
+                            );
+                          },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -64,63 +185,22 @@ class _SettingsState extends State<Settings> {
                             showCupertinoDialog(
                               barrierDismissible: true,
                               context: context,
-                              builder: (context) => Dialog(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(16)),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(25, 30, 25, 10),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text(
-                                        'Reset password',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                              builder: (context) => Popup(
+                                title: 'Reset password',
+                                content: const Text('Are you sure you want to reset your password?'),
+                                okCallback: () {
+                                  Navigator.of(context).pop();
+                                  FirebaseAuth.instance.sendPasswordResetEmail(email: AuthenticationService.email ?? '');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Password reset sent to ${AuthenticationService.email ?? 'error'}'),
+                                      action: SnackBarAction(
+                                          label: 'Dismiss',
+                                          onPressed: () {}
                                       ),
-                                      const SizedBox(height: 10),
-                                      const Text('Are you sure you want to reset your password?', textAlign: TextAlign.center,),
-                                      const SizedBox(height: 10),
-                                      Row(
-                                        children: [
-                                          const Spacer(),
-                                          TextButton(
-                                            style: ButtonStyle(
-                                              overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text(
-                                              'Cancel',
-                                              style: TextStyle(color: Style.gray, fontWeight: FontWeight.normal),
-                                            ),
-                                          ),
-                                          TextButton(
-                                              style: ButtonStyle(
-                                                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                FirebaseAuth.instance.sendPasswordResetEmail(email: AuthenticationService.email ?? '');
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text('Password reset sent to ${AuthenticationService.email ?? 'error'}'),
-                                                    action: SnackBarAction(
-                                                        label: 'Dismiss',
-                                                        onPressed: () {}
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: const Text('Confirm')
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                }
                               ),
                             );
                           },
@@ -185,42 +265,19 @@ class _SettingsState extends State<Settings> {
                             showCupertinoDialog(
                               barrierDismissible: true,
                               context: context,
-                              builder: (context) => AlertDialog(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(16)),
-                                ),
-                                title: const Text('Confirm log out'),
+                              builder: (context) => Popup(
+                                title: 'Confirm log out',
                                 content: const Text('Are you sure you want to log out?'),
-                                actions: [
-                                  TextButton(
-                                    style: ButtonStyle(
-                                      overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text(
-                                      'Cancel',
-                                      style: TextStyle(color: Style.gray, fontWeight: FontWeight.normal),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    style: ButtonStyle(
-                                      overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                    ),
-                                    onPressed: () {
-                                      context.read<AuthenticationService>().signOut();
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const FirstLogin()
-                                        ),
-                                        ModalRoute.withName('/Home')
-                                      );
-                                    },
-                                    child: const Text('Confirm')
-                                  ),
-                                ],
+                                okCallback: () {
+                                  context.read<AuthenticationService>().logOut();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const FirstLogin()
+                                      ),
+                                      ModalRoute.withName('/Home')
+                                  );
+                                },
                               ),
                             );
                           },
