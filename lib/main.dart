@@ -5,9 +5,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taneo/pages/first_login.dart';
 import 'package:taneo/pages/home.dart';
+import 'package:taneo/pages/pick_experience.dart';
 import 'package:taneo/util/authentication_service.dart';
+import 'package:taneo/util/preferences.dart';
 import 'package:taneo/util/style.dart';
 
 /*
@@ -16,6 +19,7 @@ import 'package:taneo/util/style.dart';
   - Forgot password button
   - animate keyboard open
   - unhide password
+  - show paywall if free every 50 log ins or something like that
  */
 
 Future<void> main() async {
@@ -23,6 +27,7 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  Preferences.init();
   runApp(MyApp());
 }
 
@@ -114,10 +119,20 @@ class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? firebaseUser = context.watch<User?>();
+
+    // Logged in
     if (firebaseUser != null) {
       AuthenticationService.email = firebaseUser.email;
-      return const Home();
+
+      log('Experience level: ${Preferences.getExperienceLevel()}');
+      if (Preferences.getExperienceLevel() == -1) {
+        return const PickExperience();
+      } else {
+        return const Home();
+      }
     }
+
+    // Not logged in
     return const FirstLogin();
   }
 }

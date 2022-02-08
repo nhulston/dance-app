@@ -35,6 +35,7 @@ class SignupState extends State<Signup> {
   bool _emailTakenVisible = false;
   bool _openedDialog = false;
   bool _textChanged = false;
+  bool _noWifiVisible = false;
 
   void callback() {
     setState(() {
@@ -64,6 +65,7 @@ class SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
+    AuthenticationService.connected().then((value) => _noWifiVisible = !value);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -126,7 +128,7 @@ class SignupState extends State<Signup> {
                     SizedBox(height: Style.height / 23),
                     AppText.header('Create New Account'),
                     SizedBox(height: Style.height / 60),
-                    const GoogleLoginButton(),
+                    const GoogleLoginButton(signUp: true),
                     SizedBox(height: Style.height / 90),
                     AppText.body('or sign up with email'),
                     SizedBox(height: Style.height / 30),
@@ -156,9 +158,10 @@ class SignupState extends State<Signup> {
                         ],
                       ),
                     ),
-                    if (_missingFieldsVisible || _emailTakenVisible) const SizedBox(height: 5),
-                    if (_missingFieldsVisible) AppText.error('Please fill out the missing fields.'),
-                    if (_emailTakenVisible) AppText.error('An account with this email already exists.'),
+                    if (_missingFieldsVisible || _emailTakenVisible || _noWifiVisible) const SizedBox(height: 5),
+                    if (_noWifiVisible) AppText.error('You are not connected to the internet'),
+                    if (!_noWifiVisible && _missingFieldsVisible) AppText.error('Please fill out the missing fields.'),
+                    if (!_noWifiVisible && _emailTakenVisible) AppText.error('An account with this email already exists.'),
                     const Spacer(),
                     PrimaryButton(callback: () async {
                       FocusScope.of(context).unfocus();

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
-import 'package:taneo/pages/home.dart';
+import 'package:taneo/pages/pick_experience.dart';
 import 'package:taneo/util/style.dart';
 
 class EmailPopup extends StatefulWidget {
@@ -96,11 +96,11 @@ class _EmailPopupState extends State<EmailPopup> {
                         ),
                         const Spacer(flex: 3),
                         BlackButton(callback: () {
-                          log('Sign up completed. Going to home');
+                          log('Sign up completed. Going to pick experience page');
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Home(),
+                              builder: (context) => const PickExperience(),
                             ),
                             ModalRoute.withName('/Home')
                           );
@@ -110,7 +110,7 @@ class _EmailPopupState extends State<EmailPopup> {
                             SecondaryButton(callback: () {
                               widget.goBackCallback();
                               Navigator.of(context).pop();
-                            }, grayText: '', actionText: 'Change email', color: Style.white), // TODO
+                            }, grayText: '', actionText: 'Change email', color: Style.white),
                             const SizedBox(width: 5),
                             const Spacer(),
                           ],

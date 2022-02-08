@@ -1,7 +1,7 @@
 import 'dart:developer';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
@@ -49,10 +49,11 @@ class AuthenticationService {
   final googleSignIn = GoogleSignIn();
   static GoogleSignInAccount? user;
 
-  Future<bool> googleLogin() async {
+  Future<int> googleLogin() async {
+    // 0 = failed to login, 1 = first login, 2 = regular login
     log('Logging in with Google');
     final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return false;
+    if (googleUser == null) return 0;
 
     user = googleUser;
     final googleAuth = await googleUser.authentication;
@@ -62,7 +63,17 @@ class AuthenticationService {
       idToken: googleAuth.idToken,
     );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    return true;
+    UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+    return authResult.additionalUserInfo!.isNewUser ? 1 : 2;
+  }
+
+  static Future<bool> connected() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    return false;
   }
 }

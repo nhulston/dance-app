@@ -37,6 +37,7 @@ class _LoginState extends State<Login> {
   bool _missingFieldsVisible = false;
   bool _incorrectLoginVisible = false;
   bool _textChanged = false;
+  bool _noWifiVisible = false;
 
   void callback() {
     setState(() {
@@ -63,6 +64,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    AuthenticationService.connected().then((value) => _noWifiVisible = !value);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -124,7 +126,7 @@ class _LoginState extends State<Login> {
                     SizedBox(height: Style.height / 23),
                     AppText.header('Login to your account'),
                     SizedBox(height: Style.height / 60),
-                    const GoogleLoginButton(),
+                    const GoogleLoginButton(signUp: false),
                     SizedBox(height: Style.height / 90),
                     AppText.body('or login with email'),
                     SizedBox(height: Style.height / 30),
@@ -203,9 +205,10 @@ class _LoginState extends State<Login> {
                         SizedBox(width: Style.width / 6 - 9),
                       ]
                     ),
-                    if (_missingFieldsVisible || _incorrectLoginVisible) const SizedBox(height: 5),
-                    if (_missingFieldsVisible) AppText.error('Please fill out the missing fields.'),
-                    if (_incorrectLoginVisible) AppText.error('That email or password is incorrect.'),
+                    if (_missingFieldsVisible || _incorrectLoginVisible || _noWifiVisible) const SizedBox(height: 5),
+                    if (_noWifiVisible) AppText.error('You are not connected to the internet'),
+                    if (!_noWifiVisible && _missingFieldsVisible) AppText.error('Please fill out the missing fields.'),
+                    if (!_noWifiVisible && _incorrectLoginVisible) AppText.error('That email or password is incorrect.'),
                     const Spacer(),
                     PrimaryButton(callback: () async {
                       if (_formKey.currentState!.validate()) {

@@ -6,7 +6,9 @@ import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/app_textfield.dart';
 import 'package:taneo/components/popup.dart';
 import 'package:taneo/pages/first_login.dart';
+import 'package:taneo/pages/pick_experience.dart';
 import 'package:taneo/util/authentication_service.dart';
+import 'package:taneo/util/preferences.dart';
 import 'package:taneo/util/style.dart';
 import 'package:taneo/util/validation.dart';
 
@@ -61,6 +63,8 @@ class _SettingsState extends State<Settings> {
                                 content:
                                 const Text('Are you sure you want to change your email?'),
                                 okCallback: () {
+                                  bool _hasWifi = true;
+                                  AuthenticationService.connected().then((value) => _hasWifi = value);
                                   final TextEditingController _passwordController = TextEditingController();
                                   Navigator.of(context).pop();
                                   showCupertinoDialog(
@@ -152,9 +156,15 @@ class _SettingsState extends State<Settings> {
                                           }).catchError((error) {
                                             if (Validation.passwordValidator(_passwordController.text)) {
                                               Navigator.of(context).pop();
+                                              late String _message;
+                                              if (_hasWifi) {
+                                                _message = 'Invalid password. Please try again.';
+                                              } else {
+                                                _message = 'You are not connected to wifi. Please try again.';
+                                              }
                                               ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(
-                                                  content: const Text('Invalid password. Please try again.'),
+                                                  content: Text(_message),
                                                   action: SnackBarAction(
                                                       label: 'Dismiss',
                                                       onPressed: () {}
@@ -188,18 +198,21 @@ class _SettingsState extends State<Settings> {
                               builder: (context) => Popup(
                                 title: 'Reset password',
                                 content: const Text('Are you sure you want to reset your password?'),
-                                okCallback: () {
-                                  Navigator.of(context).pop();
-                                  FirebaseAuth.instance.sendPasswordResetEmail(email: AuthenticationService.email ?? '');
+                                okCallback: () async {
+                                  late String _message;
+                                  await FirebaseAuth.instance.sendPasswordResetEmail(email: AuthenticationService.email ?? '')
+                                    .then((value) => _message = 'Password reset sent to ${AuthenticationService.email ?? 'error'}')
+                                    .catchError((onError) => _message = 'Some error occurred. Are you connected to wifi?');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Password reset sent to ${AuthenticationService.email ?? 'error'}'),
+                                      content: Text(_message),
                                       action: SnackBarAction(
                                           label: 'Dismiss',
                                           onPressed: () {}
                                       ),
                                     ),
                                   );
+                                  Navigator.of(context).pop();
                                 }
                               ),
                             );
@@ -218,8 +231,25 @@ class _SettingsState extends State<Settings> {
 
                         AppText.header('Skill Level', Style.black, 0.9),
                         const SizedBox(height: 5),
-                        AppText.boldSubtext('Change Skill Level'),
-                        AppText.body('Beginner'),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) =>
+                                PickExperience(callback: () {
+                                  setState(() {});
+                                }),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppText.boldSubtext('Change Skill Level'),
+                              AppText.body(Preferences.getExperienceLevelString()),
+                            ],
+                          ),
+                        ),
                         const SizedBox(height: 5),
                         const Divider(thickness: .6, color: Style.gray),
                         const SizedBox(height: 20),
@@ -277,6 +307,7 @@ class _SettingsState extends State<Settings> {
                                       ),
                                       ModalRoute.withName('/Home')
                                   );
+                                  Preferences.resetPrefs();
                                 },
                               ),
                             );

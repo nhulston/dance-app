@@ -1,14 +1,19 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/pages/home.dart';
+import 'package:taneo/pages/pick_experience.dart';
 import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
 
 class GoogleLoginButton extends StatefulWidget {
-  const GoogleLoginButton({Key? key}) : super(key: key);
+  const GoogleLoginButton({
+    Key? key,
+    required this.signUp,
+  }) : super(key: key);
+
+  final bool signUp;
 
   @override
   _GoogleLoginButtonState createState() => _GoogleLoginButtonState();
@@ -19,16 +24,17 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        bool loggedIn = await context.read<AuthenticationService>()
-            .googleLogin();
-        if (loggedIn) {
+        int loggedIn = await context.read<AuthenticationService>().googleLogin();
+        bool firstTime = loggedIn == 1;
+        if (loggedIn != 0) {
           log('Google log in successful');
+          log('First time logging in w/ Google: $firstTime');
           Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const Home()
-              ),
-              ModalRoute.withName('/Home')
+            context,
+            MaterialPageRoute(
+              builder: (context) => firstTime ? const PickExperience() : const Home(),
+            ),
+            ModalRoute.withName('/Home')
           );
         } else {
           log('Google log in failed. Maybe user cancelled login?');
@@ -55,7 +61,7 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
                 ),
               ),
               const SizedBox(width: 10),
-              AppText.body('Sign in with Google'),
+              AppText.body('${widget.signUp ? 'Sign up' : 'Sign in'} with Google'),
             ],
           ),
         ),
