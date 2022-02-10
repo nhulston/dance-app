@@ -24,11 +24,8 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        int loggedIn = await context.read<AuthenticationService>().googleLogin();
-        bool firstTime = loggedIn == 1;
-        if (loggedIn != 0) {
-          log('Google log in successful');
-          log('First time logging in w/ Google: $firstTime');
+        bool? firstTime = await context.read<AuthenticationService>().googleLogin();
+        if (firstTime != null) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -36,8 +33,6 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
             ),
             ModalRoute.withName('/Home')
           );
-        } else {
-          log('Google log in failed. Maybe user cancelled login?');
         }
       },
       child: Container(

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taneo/pages/tabs/home_tab.dart';
+import 'package:taneo/pages/tabs/library_tab.dart';
 import 'package:taneo/pages/tabs/search_tab.dart';
 import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
@@ -42,7 +43,7 @@ class _HomeState extends State<Home> {
           children: [
             const HomeTab(),
             const SearchTab(),
-            Container(color: Colors.blue),
+            const LibraryTab(),
           ],
         ),
       ),

@@ -167,18 +167,12 @@ class SignupState extends State<Signup> {
                       FocusScope.of(context).unfocus();
                       if (_formKey.currentState!.validate()) {
                         if (_textChanged) {
-                          log('Attempting to sign up with email ${_emailController.text}');
-
-                          await context.read<AuthenticationService>().signUp(
+                          bool signupSuccessful = await context.read<AuthenticationService>().signUpWithEmail(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                           );
 
-                          User? user = FirebaseAuth.instance.currentUser;
-                          if (user != null) {
-                            log('Sending email verification to ${_emailController.text}');
-                            user.sendEmailVerification();
-
+                          if (signupSuccessful) {
                             setState(() {
                               _missingFieldsVisible = false;
                               _emailTakenVisible = false;
@@ -186,14 +180,13 @@ class SignupState extends State<Signup> {
                             });
 
                             showCupertinoDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) {
-                                  return EmailPopup(email: _emailController.text, goBackCallback: toggleOpenedDialog);
-                                }
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                return EmailPopup(email: _emailController.text, goBackCallback: toggleOpenedDialog);
+                              }
                             );
                           } else {
-                            log('Unable to sign up');
                             _textChanged = false;
                             setState(() {
                               _missingFieldsVisible = false;

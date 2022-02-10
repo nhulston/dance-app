@@ -213,23 +213,20 @@ class _LoginState extends State<Login> {
                     PrimaryButton(callback: () async {
                       if (_formKey.currentState!.validate()) {
                         if (_textChanged) {
-                          log('Attempting to sign in with email ${_emailController.text}');
-                          await context.read<AuthenticationService>().logIn(
+                          bool loginSuccessful = await context.read<AuthenticationService>().logInWithEmail(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                           );
 
-                          if(FirebaseAuth.instance.currentUser != null) {
-                            log('Sign in successful');
+                          if(loginSuccessful) {
                             Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()
-                                ),
-                                ModalRoute.withName('/Home')
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Home()
+                              ),
+                              ModalRoute.withName('/Home')
                             );
                           } else {
-                            log('Sign in failed');
                             _textChanged = false;
                             setState(() {
                               _missingFieldsVisible = false;

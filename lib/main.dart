@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taneo/pages/first_login.dart';
 import 'package:taneo/pages/home.dart';
 import 'package:taneo/pages/pick_experience.dart';
@@ -20,6 +19,7 @@ import 'package:taneo/util/style.dart';
   - animate keyboard open
   - unhide password
   - show paywall if free every 50 log ins or something like that
+  - cool loading page
  */
 
 Future<void> main() async {
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       future: _firebaseApp,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          log('has error');
+          log('[MyApp build] Firebase init has some error');
           return MaterialApp(
             builder: (context, widget) {
               return Scaffold(
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             },
           );
         } else if (snapshot.hasData) {
-          log('has data');
+          log('[MyApp build] Firebase init has data');
           return MultiProvider(
             providers: [
               Provider<AuthenticationService>(
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
             ),
           );
         } else {
-          log('loading');
+          log('[MyApp build] Firebase is loading...');
           return MaterialApp(
             builder: (context, widget) {
               return const Scaffold(
@@ -124,7 +124,7 @@ class AuthenticationWrapper extends StatelessWidget {
     if (firebaseUser != null) {
       AuthenticationService.email = firebaseUser.email;
 
-      log('Experience level: ${Preferences.getExperienceLevel()}');
+      log('[AuthWrapper build] Experience level: ${Preferences.getExperienceLevel()}');
       if (Preferences.getExperienceLevel() == -1) {
         return const PickExperience();
       } else {

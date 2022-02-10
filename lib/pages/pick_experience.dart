@@ -6,6 +6,7 @@ import 'package:taneo/components/app_text.dart';
 import 'package:taneo/components/back_arrow.dart';
 import 'package:taneo/components/experience_card.dart';
 import 'package:taneo/pages/paywall.dart';
+import 'package:taneo/util/database_service.dart';
 import 'package:taneo/util/preferences.dart';
 import 'package:taneo/util/style.dart';
 
@@ -25,7 +26,6 @@ class _PickExperienceState extends State<PickExperience> {
   bool _firstTime = false;
   @override
   void initState() {
-    log('Experience level: ${Preferences.getExperienceLevel()}');
     if (Preferences.getExperienceLevel() == -1) {
       _firstTime = true;
     }
@@ -117,11 +117,12 @@ class _PickExperienceState extends State<PickExperience> {
                       );
                     } else {
                       Preferences.setExperienceLevel(_selected);
+                      DatabaseService.updateSkillLevel(_selected);
                       ScaffoldMessenger.of(context).clearSnackBars();
                       if (_firstTime) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const Paywall()
+                            builder: (context) => const Paywall()
                           ),
                         );
                         setState(() {

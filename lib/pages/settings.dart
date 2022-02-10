@@ -12,14 +12,14 @@ import 'package:taneo/util/preferences.dart';
 import 'package:taneo/util/style.dart';
 import 'package:taneo/util/validation.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -301,13 +301,12 @@ class _SettingsState extends State<Settings> {
                                 okCallback: () {
                                   context.read<AuthenticationService>().logOut();
                                   Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const FirstLogin()
-                                      ),
-                                      ModalRoute.withName('/Home')
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const FirstLogin()
+                                    ),
+                                    ModalRoute.withName('/Home')
                                   );
-                                  Preferences.resetPrefs();
                                 },
                               ),
                             );

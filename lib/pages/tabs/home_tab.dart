@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taneo/components/app_text.dart';
@@ -14,6 +16,18 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  String _getGreeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'morning';
+    }
+    if (hour < 17) {
+      return 'afternoon';
+    }
+    return 'evening';
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -25,13 +39,13 @@ class _HomeTabState extends State<HomeTab> {
             padding: EdgeInsets.only(left: Style.width / 12, top: Platform.isAndroid ? 20 : 0),
             child: Row(
               children: [
-                AppText.header('Good morning'),  // TODO get time
+                AppText.header('Good ${_getGreeting()}'),
                 const Spacer(),
                 IconButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => const Settings()
+                          builder: (context) => const SettingsPage()
                       ),
                     );
                   },

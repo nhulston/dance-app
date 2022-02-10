@@ -96,7 +96,7 @@ class _EmailPopupState extends State<EmailPopup> {
                         ),
                         const Spacer(flex: 3),
                         BlackButton(callback: () {
-                          log('Sign up completed. Going to pick experience page');
+                          log('[EmailPopup build] Sign up completed. Going to pick experience page');
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
