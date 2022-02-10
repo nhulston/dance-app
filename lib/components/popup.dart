@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taneo/util/style.dart';
 
-class Popup extends StatefulWidget {
+class Popup extends StatelessWidget {
   const Popup({
     Key? key,
     required this.title,
@@ -14,18 +14,13 @@ class Popup extends StatefulWidget {
   final VoidCallback okCallback;
 
   @override
-  _PopupState createState() => _PopupState();
-}
-
-class _PopupState extends State<Popup> {
-  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-      title: Text(widget.title),
-      content: widget.content,
+      title: Text(title),
+      content: content,
       actions: [
         TextButton(
           style: ButtonStyle(
@@ -43,7 +38,7 @@ class _PopupState extends State<Popup> {
             style: ButtonStyle(
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
-            onPressed: widget.okCallback,
+            onPressed: okCallback,
             child: const Text('Confirm')
         ),
       ],

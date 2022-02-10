@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taneo/util/style.dart';
 
-class ExperienceCard extends StatefulWidget {
+class ExperienceCard extends StatelessWidget {
   const ExperienceCard({
     Key? key,
     required this.name,
@@ -16,26 +16,21 @@ class ExperienceCard extends StatefulWidget {
   final bool? imageOnRight;
 
   @override
-  _ExperienceCardState createState() => _ExperienceCardState();
-}
-
-class _ExperienceCardState extends State<ExperienceCard> {
-  @override
   Widget build(BuildContext context) {
     Widget image = SizedBox(
       width: Style.width / 2.7,
       child: Column(
         children: [
-          Image.asset('assets/experience_icons/${widget.img}.png', width: Style.width / 5),
+          Image.asset('assets/experience_icons/$img.png', width: Style.width / 5),
           Text(
-            widget.name,
+            name,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Style.accent,
-              fontSize: Style.bodyFontSize + 1,
-              height: 1.5,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.1
+                color: Style.accent,
+                fontSize: Style.bodyFontSize + 1,
+                height: 1.5,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.1
             ),
           ),
         ],
@@ -47,7 +42,7 @@ class _ExperienceCardState extends State<ExperienceCard> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Text(
-          widget.description,
+          this.description,
           textAlign: TextAlign.center,
           style: const TextStyle(color: Style.accent, fontSize: Style.bodyFontSize + 1, height: 1.5),
         ),
@@ -61,9 +56,9 @@ class _ExperienceCardState extends State<ExperienceCard> {
         padding: EdgeInsets.fromLTRB(0, Style.width / 15, Style.width / 15, Style.width / 15),
         child: Row(
           children: [
-            widget.imageOnRight == null ? image : description,
+            imageOnRight == null ? image : description,
             const Spacer(),
-            widget.imageOnRight == null ? description : image,
+            imageOnRight == null ? description : image,
           ],
         ),
       ),

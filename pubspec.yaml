@@ -35,6 +35,7 @@ flutter:
     - assets/experience_icons/
     - assets/paywall_icons/
     - assets/search_icons/
+    - assets/image_icons/
 
   # fonts:
   #   - family: Schyler

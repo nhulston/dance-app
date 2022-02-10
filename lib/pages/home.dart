@@ -40,10 +40,10 @@ class _HomeState extends State<Home> {
         child: PageView(
           controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: [
-            const HomeTab(),
-            const SearchTab(),
-            const LibraryTab(),
+          children: const [
+            HomeTab(),
+            SearchTab(),
+            LibraryTab(),
           ],
         ),
       ),

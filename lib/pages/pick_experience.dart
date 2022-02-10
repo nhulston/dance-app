@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';

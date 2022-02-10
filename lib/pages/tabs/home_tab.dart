@@ -1,21 +1,15 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/pages/settings.dart';
 import 'package:taneo/util/style.dart';
 
-class HomeTab extends StatefulWidget {
+import '../../components/playlist.dart';
+
+class HomeTab extends StatelessWidget {
   const HomeTab({Key? key}) : super(key: key);
 
-  @override
-  _HomeTabState createState() => _HomeTabState();
-}
-
-class _HomeTabState extends State<HomeTab> {
   String _getGreeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) {
@@ -26,7 +20,6 @@ class _HomeTabState extends State<HomeTab> {
     }
     return 'evening';
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +54,11 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 SizedBox(width: Style.width / 12 - 10),
-                const _Playlist(name: 'Recently played #1', image: ''),
-                const _Playlist(name: 'Recently played #2', image: ''),
-                const _Playlist(name: 'Recently played #3', image: ''),
-                const _Playlist(name: 'Recently played #4', image: ''),
-                const _Playlist(name: 'Recently played #5', image: ''),
+                const Playlist(name: 'Recently played #1', image: ''),
+                const Playlist(name: 'Recently played #2', image: ''),
+                const Playlist(name: 'Recently played #3', image: ''),
+                const Playlist(name: 'Recently played #4', image: ''),
+                const Playlist(name: 'Recently played #5', image: ''),
               ],
             ),
           ),
@@ -83,11 +76,11 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 SizedBox(width: Style.width / 12 - 10),
-                const _Playlist(name: 'Verified #1', image: '', scale: 1.35,),
-                const _Playlist(name: 'Verified #2', image: '', scale: 1.35),
-                const _Playlist(name: 'Verified #3', image: '', scale: 1.35),
-                const _Playlist(name: 'Verified #4', image: '', scale: 1.35),
-                const _Playlist(name: 'Verified #5', image: '', scale: 1.35),
+                const Playlist(name: 'Verified #1', image: '', scale: 1.35,),
+                const Playlist(name: 'Verified #2', image: '', scale: 1.35),
+                const Playlist(name: 'Verified #3', image: '', scale: 1.35),
+                const Playlist(name: 'Verified #4', image: '', scale: 1.35),
+                const Playlist(name: 'Verified #5', image: '', scale: 1.35),
               ],
             ),
           ),
@@ -102,11 +95,11 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 SizedBox(width: Style.width / 12 - 10),
-                const _Playlist(name: 'Recommended #1', image: ''),
-                const _Playlist(name: 'Recommended #2', image: ''),
-                const _Playlist(name: 'Recommended #3', image: ''),
-                const _Playlist(name: 'Recommended #4', image: ''),
-                const _Playlist(name: 'Recommended #5', image: ''),
+                const Playlist(name: 'Recommended #1', image: ''),
+                const Playlist(name: 'Recommended #2', image: ''),
+                const Playlist(name: 'Recommended #3', image: ''),
+                const Playlist(name: 'Recommended #4', image: ''),
+                const Playlist(name: 'Recommended #5', image: ''),
               ],
             ),
           ),
@@ -121,9 +114,9 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 SizedBox(width: Style.width / 12 - 10),
-                const _Playlist(name: 'Strength #1', image: ''),
-                const _Playlist(name: 'Strength #2', image: ''),
-                const _Playlist(name: 'Strength #3', image: ''),
+                const Playlist(name: 'Strength #1', image: ''),
+                const Playlist(name: 'Strength #2', image: ''),
+                const Playlist(name: 'Strength #3', image: ''),
               ],
             ),
           ),
@@ -138,9 +131,9 @@ class _HomeTabState extends State<HomeTab> {
             child: Row(
               children: [
                 SizedBox(width: Style.width / 12 - 10),
-                const _Playlist(name: 'Flexibility #1', image: ''),
-                const _Playlist(name: 'Flexibility #2', image: ''),
-                const _Playlist(name: 'Flexibility #3', image: ''),
+                const Playlist(name: 'Flexibility #1', image: ''),
+                const Playlist(name: 'Flexibility #2', image: ''),
+                const Playlist(name: 'Flexibility #3', image: ''),
               ],
             ),
           ),
@@ -150,42 +143,3 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 }
-
-class _Playlist extends StatefulWidget {
-  const _Playlist({
-    Key? key,
-    required this.name,
-    required this.image,
-    this.scale,
-  }) : super(key: key);
-
-  final String name;
-  final String image;
-  final double? scale;
-
-  @override
-  _PlaylistState createState() => _PlaylistState();
-}
-
-class _PlaylistState extends State<_Playlist> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-      child: SizedBox(
-        width: 100 * (widget.scale ?? 1),
-        height: 150 * (widget.scale ?? 1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // TODO image,
-            Image.asset('assets/experience_icons/advanced.png'),
-            const SizedBox(height: 10),
-            AppText.boldSubtext(widget.name, widget.scale ?? 1),
-          ],
-        ),
-      ),
-    );
-  }
-}
-

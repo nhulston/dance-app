@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taneo/util/style.dart';
 
-class PrimaryButton extends StatefulWidget {
+class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     Key? key,
     required this.callback,
@@ -13,14 +13,9 @@ class PrimaryButton extends StatefulWidget {
   final double? widthFactor;
 
   @override
-  _PrimaryButtonState createState() => _PrimaryButtonState();
-}
-
-class _PrimaryButtonState extends State<PrimaryButton> {
-  @override
   Widget build(BuildContext context) {
     return Container(
-      width: Style.width * .7 * (widget.widthFactor ?? 1),
+      width: Style.width * .7 * (widthFactor ?? 1),
       height: Style.height / 17,
       decoration: BoxDecoration(
         gradient: const LinearGradient(colors: [Style.accent, Style.accentGradient]),
@@ -35,9 +30,9 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: widget.callback,
+        onPressed: callback,
         child: Text(
-          widget.text,
+          text,
           style: const TextStyle(
             letterSpacing: 1,
             color: Style.white,
@@ -53,7 +48,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   }
 }
 
-class SecondaryButton extends StatefulWidget {
+class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     Key? key,
     required this.callback,
@@ -67,27 +62,22 @@ class SecondaryButton extends StatefulWidget {
   final Color? color;
 
   @override
-  _SecondaryButtonState createState() => _SecondaryButtonState();
-}
-
-class _SecondaryButtonState extends State<SecondaryButton> {
-  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          widget.grayText,
+          grayText,
           style: const TextStyle(
             color: Style.gray,
           ),
         ),
         TextButton(
-          onPressed: widget.callback,
+          onPressed: callback,
           child: Text(
-            widget.actionText,
+            actionText,
             style: TextStyle(
-              color: widget.color ?? Style.accent,
+              color: color ?? Style.accent,
             ),
           ),
         ),
@@ -96,7 +86,7 @@ class _SecondaryButtonState extends State<SecondaryButton> {
   }
 }
 
-class BlackButton extends StatefulWidget {
+class BlackButton extends StatelessWidget {
   const BlackButton({
     Key? key,
     required this.callback,
@@ -107,30 +97,25 @@ class BlackButton extends StatefulWidget {
   final String text;
 
   @override
-  _BlackButtonState createState() => _BlackButtonState();
-}
-
-class _BlackButtonState extends State<BlackButton> {
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Style.width * .65,
-      height: Style.height / 17,
-      child: TextButton(
-        onPressed: widget.callback,
-        child: Text(
-          widget.text,
-          style: const TextStyle(
-            color: Style.white,
+        width: Style.width * .65,
+        height: Style.height / 17,
+        child: TextButton(
+          onPressed: callback,
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Style.white,
+            ),
           ),
-        ),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Style.black),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Style.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+            ),
           ),
-        ),
-      )
+        )
     );
   }
 }

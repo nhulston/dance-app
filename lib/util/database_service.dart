@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   static CollectionReference users = FirebaseFirestore.instance.collection('users');
+  static CollectionReference videos = FirebaseFirestore.instance.collection('videos');
 
   /// Gets user doc
   static DocumentReference getUserDoc() {
@@ -25,7 +26,13 @@ class DatabaseService {
         .catchError((error) => log('[DB updateSkillLevel] Failed to update skill level in database: $error'));
   }
 
+  /// Get skill level from database
   static Future<int> getSkillLevel() async {
     return (await getUserDoc().get())['skill'];
+  }
+
+  /// Get stream of videos
+  static Stream<QuerySnapshot<Object?>> getVideos() {
+    return videos.snapshots();
   }
 }

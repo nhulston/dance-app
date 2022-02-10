@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 
-class LibraryTab extends StatefulWidget {
+class LibraryTab extends StatelessWidget {
   const LibraryTab({Key? key}) : super(key: key);
 
-  @override
-  _LibraryTabState createState() => _LibraryTabState();
-}
-
-class _LibraryTabState extends State<LibraryTab> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

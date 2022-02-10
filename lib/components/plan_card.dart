@@ -3,7 +3,7 @@ import 'package:taneo/components/app_buttons.dart';
 import 'package:taneo/components/app_text.dart';
 import 'package:taneo/util/style.dart';
 
-class PlanCard extends StatefulWidget {
+class PlanCard extends StatelessWidget {
   const PlanCard({
     Key? key,
     required this.name,
@@ -17,11 +17,6 @@ class PlanCard extends StatefulWidget {
   final List<String> benefits;
   final String cost;
 
-  @override
-  _PlanCardState createState() => _PlanCardState();
-}
-
-class _PlanCardState extends State<PlanCard> {
   Text _getBullet(String s) {
     return Text(
       '•' + s,
@@ -36,9 +31,9 @@ class _PlanCardState extends State<PlanCard> {
       width: Style.width / 3,
       child: Column(
         children: [
-          Image.asset('assets/paywall_icons/${widget.img}.png', width: Style.width / 5),
+          Image.asset('assets/paywall_icons/$img.png', width: Style.width / 5),
           const SizedBox(height: 10),
-          AppText.header(widget.name, Style.black, .9)
+          AppText.header(name, Style.black, .9)
         ],
       ),
     );
@@ -48,30 +43,30 @@ class _PlanCardState extends State<PlanCard> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (String s in widget.benefits) _getBullet(s),
-          ]
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (String s in benefits) _getBullet(s),
+            ]
         ),
       ),
     );
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, Style.width / 15, 0, Style.width / 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              image,
-              const Spacer(),
-              description,
-            ],
-          ),
-          const SizedBox(height: 20),
-          PrimaryButton(callback: null, text: widget.cost, widthFactor: .85),
-        ],
-      )
+        padding: EdgeInsets.fromLTRB(0, Style.width / 15, 0, Style.width / 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                image,
+                const Spacer(),
+                description,
+              ],
+            ),
+            const SizedBox(height: 20),
+            PrimaryButton(callback: null, text: cost, widthFactor: .85),
+          ],
+        )
     );
   }
 }

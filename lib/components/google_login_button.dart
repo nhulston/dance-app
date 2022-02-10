@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:taneo/components/app_text.dart';
@@ -7,7 +6,7 @@ import 'package:taneo/pages/pick_experience.dart';
 import 'package:taneo/util/authentication_service.dart';
 import 'package:taneo/util/style.dart';
 
-class GoogleLoginButton extends StatefulWidget {
+class GoogleLoginButton extends StatelessWidget {
   const GoogleLoginButton({
     Key? key,
     required this.signUp,
@@ -16,22 +15,17 @@ class GoogleLoginButton extends StatefulWidget {
   final bool signUp;
 
   @override
-  _GoogleLoginButtonState createState() => _GoogleLoginButtonState();
-}
-
-class _GoogleLoginButtonState extends State<GoogleLoginButton> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
         bool? firstTime = await context.read<AuthenticationService>().googleLogin();
         if (firstTime != null) {
           Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => firstTime ? const PickExperience() : const Home(),
-            ),
-            ModalRoute.withName('/Home')
+              context,
+              MaterialPageRoute(
+                builder: (context) => firstTime ? const PickExperience() : const Home(),
+              ),
+              ModalRoute.withName('/Home')
           );
         }
       },
@@ -56,7 +50,7 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
                 ),
               ),
               const SizedBox(width: 10),
-              AppText.body('${widget.signUp ? 'Sign up' : 'Sign in'} with Google'),
+              AppText.body('${signUp ? 'Sign up' : 'Sign in'} with Google'),
             ],
           ),
         ),

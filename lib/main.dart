@@ -14,12 +14,12 @@ import 'package:taneo/util/style.dart';
 
 /*
   TODO list
-  - Change images for login and register page
-  - Forgot password button
-  - animate keyboard open
   - unhide password
   - show paywall if free every 50 log ins or something like that
-  - cool loading page
+  - cool loading page instead of CircularProgressIndicator.adaptive
+  - Search tab - show recent searches when search bar is empty
+  - Credit flaticon in settings
+  - Ask user to update
  */
 
 Future<void> main() async {

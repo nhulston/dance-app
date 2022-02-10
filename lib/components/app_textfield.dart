@@ -97,8 +97,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 }
 
-
-
 class SimpleTextField {
   static const OutlineInputBorder _border = OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -108,19 +106,20 @@ class SimpleTextField {
     ),
   );
 
-  static TextFieldConfiguration getTextFieldConfiguration(TextEditingController controller, var callback) {
+  static TextFieldConfiguration getTextFieldConfiguration(TextEditingController controller, var editCallback, VoidCallback tapCallback) {
     return TextFieldConfiguration(
       controller: controller,
       onChanged: (s) {
-        callback();
+        editCallback();
       },
+      onTap: tapCallback,
       decoration: InputDecoration(
           prefixIcon: const Icon(CupertinoIcons.search, color: Style.black),
           suffixIcon: IconButton(
             splashColor: controller.text.isEmpty ? Colors.transparent : null,
             onPressed: () {
               controller.text = '';
-              callback();
+              editCallback();
             },
             icon: Visibility(
               visible: controller.text.isNotEmpty,
